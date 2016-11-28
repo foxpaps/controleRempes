@@ -1,0 +1,18 @@
+; frequence de rafraichissement des données du control parental en minutes
+frequenceRefresh=5
+
+;Alerte Bloquage
+AlerteBloquage=true
+AlerteBloquageBefore=29
+AlerteBloquageSound=/D:/Java/workspace/controlePapa/src/Evil-laugh.mp3
+
+;Alerte Web Unique
+AlerteWebUnique=true
+AlerteWebUniqueBefore=29
+AlerteWebUniqueSound=/D:/Java/workspace/controlePapa/src/Fire-truck-with-siren-passing-by.mp3
+
+;Alerte Autorisation
+AlerteAutorisation=true
+AlerteAutorisationBefore=29
+AlerteAutorisationSound=/D:/Java/workspace/controlePapa/src/Old-fashioned-alarm-clock.mp3
+
