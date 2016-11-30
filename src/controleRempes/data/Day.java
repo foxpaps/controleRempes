@@ -1,6 +1,6 @@
-package controlePapa.data;
+package controleRempes.data;
 
-import controlePapa.data.ParamAccess.StatusAutorisation;
+import controleRempes.data.ParamAccess.StatusAutorisation;
 
 public class Day {
 	

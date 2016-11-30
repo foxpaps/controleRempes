@@ -1,4 +1,4 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

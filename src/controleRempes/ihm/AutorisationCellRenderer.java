@@ -1,4 +1,4 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,7 +8,7 @@ import java.util.Calendar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import controlePapa.data.ParamAccess.StatusAutorisation;
+import controleRempes.data.ParamAccess.StatusAutorisation;
 
 public class AutorisationCellRenderer extends DefaultTableCellRenderer {
 

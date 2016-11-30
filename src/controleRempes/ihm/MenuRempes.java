@@ -1,4 +1,4 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import javax.swing.Action;
 import javax.swing.Box;
@@ -7,7 +7,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 
-public class MenuPapa extends JMenuBar 
+public class MenuRempes extends JMenuBar 
 {
 	/**
 	 * 
@@ -30,7 +30,7 @@ public class MenuPapa extends JMenuBar
 	/*menuBar.setSize(800, 100);
 	menuBar.add(getmenuFile());*/
 
-	public MenuPapa(Action logFreebox, Action action) 
+	public MenuRempes(Action logFreebox, Action action) 
 	{
 		super();
 		

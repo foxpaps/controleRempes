@@ -1,13 +1,13 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 
-import controlePapa.MainControlePapa;
-import controlePapa.data.ConfigParental;
-import controlePapa.data.ParamAccess.StatusAutorisation;
-import controlePapa.data.Planning;
+import controleRempes.MainControleRempes;
+import controleRempes.data.ConfigParental;
+import controleRempes.data.Planning;
+import controleRempes.data.ParamAccess.StatusAutorisation;
 
 public class ThreadCheckAlertes implements Runnable  {
 
@@ -26,7 +26,7 @@ public class ThreadCheckAlertes implements Runnable  {
 				long beginTime  = System.currentTimeMillis();
 				System.out.println("Check Alertes begin");
 				
-				final Planning planning = MainControlePapa.getInstance().getParamAccess().getPlanning();
+				final Planning planning = MainControleRempes.getInstance().getParamAccess().getPlanning();
 				Calendar calendar = Calendar.getInstance();	
 				StatusAutorisation currentStatus = planning.getStatus(calendar);
 				Calendar nextCalendar = (Calendar) calendar.clone();

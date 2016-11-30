@@ -1,4 +1,4 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import controlePapa.MainControlePapa;
+import controleRempes.MainControleRempes;
 
 public class GetFilters {
 
@@ -39,10 +39,10 @@ public class GetFilters {
 				System.out.println(result.toString());
 			}
 		} catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		} catch (Exception e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}
 		return result;
@@ -69,10 +69,10 @@ public class GetFilters {
 				System.out.println(result.toString());
 			}
 		} catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		} catch (Exception e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}
 		return result;
@@ -98,10 +98,10 @@ public class GetFilters {
 				System.out.println(result.toString());
 			}
 		} catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		} catch (Exception e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}
 		return result;

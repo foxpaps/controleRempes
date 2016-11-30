@@ -1,4 +1,4 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -28,8 +28,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import controlePapa.MainControlePapa;
-import controlePapa.ihm.MenuPapa;
+import controleRempes.MainControleRempes;
+import controleRempes.ihm.MenuRempes;
 
 public class LogFreebox implements Action {
 
@@ -88,7 +88,7 @@ public class LogFreebox implements Action {
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
 		
@@ -106,7 +106,7 @@ public class LogFreebox implements Action {
 			e.printStackTrace();
 		}
 
-		MainControlePapa.showInfo("Un message sur votre Freebox demandant l'authorisation pour l'acces de l'application doit apparaître.\n Merci d'accepter en utlisant l'écran de votre Freebox");
+		MainControleRempes.showInfo("Un message sur votre Freebox demandant l'authorisation pour l'acces de l'application doit apparaître.\n Merci d'accepter en utlisant l'écran de votre Freebox");
 		System.out.println("executing request " + httpPost.getRequestLine());
 
 		try (CloseableHttpResponse response = httpclient.execute(httpPost)){
@@ -120,12 +120,12 @@ public class LogFreebox implements Action {
 			try  (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TOKEN_FILE), "utf-8"))) {
 				writer.write(retSrc);
 			} catch (IOException e) {				
-				MainControlePapa.showError(e.getMessage()); 
+				MainControleRempes.showError(e.getMessage()); 
 				e.printStackTrace();
 			}	
 
 		} catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -151,10 +151,10 @@ public class LogFreebox implements Action {
 				System.out.println(result.toString());
 			}
 		} catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		} catch (Exception e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}
 		return result;
@@ -182,7 +182,7 @@ public class LogFreebox implements Action {
 			jsonToken = new JSONObject(retSrc);
 		}
 		catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -194,8 +194,8 @@ public class LogFreebox implements Action {
 		try {
 			tokenAuthorize = readTokenAuthorize();
 		} catch (FileNotFoundException e) {
-			MainControlePapa.showError(e.getMessage());
-			MainControlePapa.showInfo("Demander l'autorisation, puis relogguer ...");
+			MainControleRempes.showError(e.getMessage());
+			MainControleRempes.showInfo("Demander l'autorisation, puis relogguer ...");
 			tokenAuthorize = authorize();
 		}
 
@@ -238,7 +238,7 @@ public class LogFreebox implements Action {
 				currentSession = resultSession.getString("session_token");
 				permission = true;
 			} else {
-				MainControlePapa.showInfo("L'appliation \"Dady\", n'a pas l'acc�s au contr�le parentale.\nDemande l'acces de l'application � tes parents.");
+				MainControleRempes.showInfo("L'appliation \"Dady\", n'a pas l'accés au contrôle parentale.\nDemande l'acces de l'application à tes parents.");
 			}
 		}
 		return permission;
@@ -259,7 +259,7 @@ public class LogFreebox implements Action {
 			jsonToken = new JSONObject(retSrc);
 		}
 		catch (IOException e) {
-			MainControlePapa.showError(e.getMessage()); 
+			MainControleRempes.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -290,21 +290,21 @@ public class LogFreebox implements Action {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals(MenuPapa.AUTORIZATION)) {
+		if (e.getActionCommand().equals(MenuRempes.AUTORIZATION)) {
 			System.out.println("Demande autorisation");			
 			JSONObject resultAutorise = authorize();
 
 			if (resultAutorise.getBoolean("success")) {
-				MainControlePapa.showInfo("Autorization accord�e.");
+				MainControleRempes.showInfo("Autorization accord�e.");
 			} else {
-				MainControlePapa.showInfo("Autorization refus�e.");
+				MainControleRempes.showInfo("Autorization refus�e.");
 			}			 
-		} else if (e.getActionCommand().equals(MenuPapa.CONNEXION)) {
+		} else if (e.getActionCommand().equals(MenuRempes.CONNEXION)) {
 			System.out.println("Demande connexion");
 
 			connexion();
 
-		} else if (e.getActionCommand().equals(MenuPapa.DECONNEXION)) {
+		} else if (e.getActionCommand().equals(MenuRempes.DECONNEXION)) {
 			System.out.println("Demande deconnexion");
 			//JSONObject result =  
 			logout();
@@ -360,11 +360,11 @@ public class LogFreebox implements Action {
 		JSONObject sessionToken = login();
 
 		if ( checkPermission(sessionToken)) {
-			MainControlePapa.getInstance().getStatusPanel().setStatusConnexion("Connexion accordée.");
+			MainControleRempes.getInstance().getStatusPanel().setStatusConnexion("Connexion accordée.");
 			//MainControlePapa.showInfo("Connexion accordée.");
 		} else {
-			MainControlePapa.getInstance().getStatusPanel().setStatusConnexion("Echec de connection.");
-			MainControlePapa.showError("Echec de connection.");
+			MainControleRempes.getInstance().getStatusPanel().setStatusConnexion("Echec de connection.");
+			MainControleRempes.showError("Echec de connection.");
 		}
 	}
 }

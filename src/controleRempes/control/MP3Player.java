@@ -1,4 +1,4 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

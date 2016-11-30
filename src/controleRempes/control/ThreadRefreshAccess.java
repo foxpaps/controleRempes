@@ -1,4 +1,4 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -6,14 +6,14 @@ import java.net.UnknownHostException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import controlePapa.MainControlePapa;
-import controlePapa.data.ConfigParental;
-import controlePapa.data.Day;
-import controlePapa.data.ParamAccess;
-import controlePapa.data.Planning;
-import controlePapa.data.ParamAccess.SchedulingMode;
-import controlePapa.data.ParamAccess.StatusAutorisation;
-import controlePapa.data.Planning.TypeFiltrage;
+import controleRempes.MainControleRempes;
+import controleRempes.data.ConfigParental;
+import controleRempes.data.Day;
+import controleRempes.data.ParamAccess;
+import controleRempes.data.Planning;
+import controleRempes.data.ParamAccess.SchedulingMode;
+import controleRempes.data.ParamAccess.StatusAutorisation;
+import controleRempes.data.Planning.TypeFiltrage;
 
 public class ThreadRefreshAccess implements Runnable  {
 
@@ -46,12 +46,12 @@ public class ThreadRefreshAccess implements Runnable  {
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e1) {
-			MainControlePapa.showError(e1.getMessage()); 
+			MainControleRempes.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
 		hostName = "Matth-PC"; //TODO remove it
 
-		ParamAccess param = MainControlePapa.getInstance().getParamAccess();		
+		ParamAccess param = MainControleRempes.getInstance().getParamAccess();		
 		param.setPeriferique(hostName);
 
 		JSONObject filter = GetFilters.getCurrentFilter(hostName);
@@ -64,17 +64,17 @@ public class ThreadRefreshAccess implements Runnable  {
 			case planning :
 				refreshPlaning(param,id);
 				param.getPlanning().setFiltrage(TypeFiltrage.Planification);
-				MainControlePapa.getInstance().updatePlanning(param);			
+				MainControleRempes.getInstance().updatePlanning(param);			
 				break;
 			case temporary :
 				refreshPlaning(param,id);
-				MainControlePapa.getInstance().updatePlanning(param);			
+				MainControleRempes.getInstance().updatePlanning(param);			
 				System.out.println("temporary");
 				break;
 			case forced :
 				refreshPlaning(param,id);
 				refreshForcedMode(param,filter);
-				MainControlePapa.getInstance().updatePlanning(param);	
+				MainControleRempes.getInstance().updatePlanning(param);	
 				System.out.println("forced");
 				break;
 			case Indefini:
@@ -85,11 +85,11 @@ public class ThreadRefreshAccess implements Runnable  {
 
 			//todo invokelater
 			refreshTemporary(param,filter);
-			MainControlePapa.getInstance().updateTmpMode(param);
+			MainControleRempes.getInstance().updateTmpMode(param);
 		}
-		MainControlePapa.getInstance().updateStatus();
+		MainControleRempes.getInstance().updateStatus();
 
-		MainControlePapa.getInstance().repaint();
+		MainControleRempes.getInstance().repaint();
 	}
 
 

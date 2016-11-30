@@ -1,4 +1,4 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -35,9 +35,9 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import controlePapa.control.MP3Player;
-import controlePapa.data.Alerte;
-import controlePapa.data.ConfigParental;
+import controleRempes.control.MP3Player;
+import controleRempes.data.Alerte;
+import controleRempes.data.ConfigParental;
 
 public class AlerteDialogue extends JDialog  implements ActionListener {
 

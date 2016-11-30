@@ -1,4 +1,4 @@
-package controlePapa.control;
+package controleRempes.control;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -6,24 +6,24 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JFrame;
 
-import controlePapa.MainControlePapa;
-import controlePapa.data.ConfigParental;
-import controlePapa.data.Day;
-import controlePapa.data.ParamAccess;
-import controlePapa.data.Planning;
-import controlePapa.ihm.AlerteDialogue;
-import controlePapa.ihm.MenuPapa;
+import controleRempes.MainControleRempes;
+import controleRempes.data.ConfigParental;
+import controleRempes.data.Day;
+import controleRempes.data.ParamAccess;
+import controleRempes.data.Planning;
+import controleRempes.ihm.AlerteDialogue;
+import controleRempes.ihm.MenuRempes;
 
-public class ActionPapa implements Action {
+public class ActionRempes implements Action {
 
-	private static ActionPapa actionPapa = null;
+	private static ActionRempes actionRempes = null;
 
-	public static ActionPapa getInstance() 
+	public static ActionRempes getInstance() 
 	{
-		if (actionPapa == null) {
-			actionPapa =  new ActionPapa();
+		if (actionRempes == null) {
+			actionRempes =  new ActionRempes();
 		} 
-		return actionPapa;
+		return actionRempes;
 	}
 
 	public ParamAccess initData() {
@@ -57,18 +57,18 @@ public class ActionPapa implements Action {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getActionCommand().equals(MenuPapa.REFRESH)) {
+		if (e.getActionCommand().equals(MenuRempes.REFRESH)) {
 			System.out.println("Demande refresh");		
 			ThreadRefreshAccess.refreshParamAcces();
 		}	
-		else if (e.getActionCommand().equals(MenuPapa.ALERTE)) {
+		else if (e.getActionCommand().equals(MenuRempes.ALERTE)) {
 			System.out.println("Demande Alerte");		
 			alerte();
 		}			 	 
 	} 
 
 	private void alerte() {
-		final JFrame alerteFrame = MainControlePapa.mainFrame;
+		final JFrame alerteFrame = MainControleRempes.mainFrame;
 		new AlerteDialogue(alerteFrame,ConfigParental.getInstance());
 	}
 

@@ -1,9 +1,9 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
-import controlePapa.data.ParamAccess;
+import controleRempes.data.ParamAccess;
 
 public class TableSemaine extends AbstractTableModel  {
 

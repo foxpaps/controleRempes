@@ -1,15 +1,12 @@
-package controlePapa;
+package controleRempes;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.util.Calendar;
 
-import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -17,20 +14,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONObject;
+import controleRempes.control.ActionRempes;
+import controleRempes.control.LogFreebox;
+import controleRempes.control.ThreadCheckAlertes;
+import controleRempes.control.ThreadRefreshAccess;
+import controleRempes.data.ParamAccess;
+import controleRempes.data.ParamAccess.StatusAutorisation;
+import controleRempes.data.Planning;
+import controleRempes.ihm.MainPanel;
+import controleRempes.ihm.MenuRempes;
+import controleRempes.ihm.StatusPanel;
 
-import controlePapa.control.ActionPapa;
-import controlePapa.control.LogFreebox;
-import controlePapa.control.ThreadCheckAlertes;
-import controlePapa.control.ThreadRefreshAccess;
-import controlePapa.data.ParamAccess;
-import controlePapa.data.Planning;
-import controlePapa.data.ParamAccess.StatusAutorisation;
-import controlePapa.ihm.MainPanel;
-import controlePapa.ihm.MenuPapa;
-import controlePapa.ihm.StatusPanel;
-
-public class MainControlePapa extends JFrame
+public class MainControleRempes extends JFrame
 {
 
 	/**
@@ -38,22 +33,22 @@ public class MainControlePapa extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static MainControlePapa mainFrame = null;
+	public static MainControleRempes mainFrame = null;
 
 	private MainPanel mainPanCommand =null ;	// panel principal
-	private MenuPapa menuBar = null ;
+	private MenuRempes menuBar = null ;
 	private StatusPanel statusPanel = null; 
 	
 	private ParamAccess paramAccess = null;
 
-	public static MainControlePapa getInstance() {
+	public static MainControleRempes getInstance() {
 		if (mainFrame==null) {
-			mainFrame = new MainControlePapa();
+			mainFrame = new MainControleRempes();
 		}	
 		return mainFrame;
 	}
 
-	private MainControlePapa()
+	private MainControleRempes()
 	{
 		super();
 
@@ -61,8 +56,8 @@ public class MainControlePapa extends JFrame
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		JDialog.setDefaultLookAndFeelDecorated(true);
 
-		paramAccess = ActionPapa.getInstance().initData(); // init des données par defaut
-		menuBar = new MenuPapa( LogFreebox.getInstance(),ActionPapa.getInstance());
+		paramAccess = ActionRempes.getInstance().initData(); // init des données par defaut
+		menuBar = new MenuRempes( LogFreebox.getInstance(),ActionRempes.getInstance());
 		mainPanCommand = new MainPanel(paramAccess);
 		mainPanCommand.setPreferredSize(new Dimension(800,300));
 
@@ -96,7 +91,7 @@ public class MainControlePapa extends JFrame
 	public void updateStatus() {
 		
 		Calendar calendar = Calendar.getInstance();	
-		final Planning planning = MainControlePapa.getInstance().getParamAccess().getPlanning();
+		final Planning planning = MainControleRempes.getInstance().getParamAccess().getPlanning();
 		StatusAutorisation currentStatus = planning.getStatus(calendar);
 		String statusAutorisation = ParamAccess.GetStatusNameAutorisation(currentStatus);
 		statusPanel.setStatusAutorisation(statusAutorisation);
@@ -107,7 +102,7 @@ public class MainControlePapa extends JFrame
 		return mainPanCommand;
 	}
 
-	public MenuPapa getMenu()
+	public MenuRempes getMenu()
 	{
 		return menuBar;
 	}
@@ -131,7 +126,7 @@ public class MainControlePapa extends JFrame
 		{
 			public void run() 
 			{
-				mainFrame =new MainControlePapa();
+				mainFrame =new MainControleRempes();
 				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) ) ;
 				Image icone = Toolkit.getDefaultToolkit().getImage("parents.png");
 				mainFrame.setIconImage(icone);

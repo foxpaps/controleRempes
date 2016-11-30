@@ -1,4 +1,4 @@
-package controlePapa.ihm;
+package controleRempes.ihm;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,7 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.TableModel;
 
-import controlePapa.data.ParamAccess;
+import controleRempes.data.ParamAccess;
 
 public class MainPanel extends JPanel {
 
