@@ -13,9 +13,7 @@ import controleRempes.data.ParamAccess.StatusAutorisation;
 public class AutorisationCellRenderer extends DefaultTableCellRenderer {
 
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 1621885528494598241L;
 
 	@Override
@@ -41,7 +39,7 @@ public class AutorisationCellRenderer extends DefaultTableCellRenderer {
 				int posInDay = hour*2 + (minute<29 ? 0 : 1);
 				if (posInDay+1==column) {
 					setForeground(Color.white);
-					setFont(new Font("Dialog", Font.BOLD, 12));
+					setFont(new Font(Font.DIALOG, Font.BOLD, 12));
 					setText("X");
 				}
 			}

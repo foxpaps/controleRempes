@@ -2,6 +2,9 @@ package controleRempes.control;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Locale;
 
 import javax.swing.Action;
 import javax.swing.JFrame;
@@ -17,38 +20,34 @@ import controleRempes.ihm.MenuRempes;
 public class ActionRempes implements Action {
 
 	private static ActionRempes actionRempes = null;
-
-	public static ActionRempes getInstance() 
+	private GuiControlRempes guiControl = null;
+	
+	public static ActionRempes getInstance(final GuiControlRempes guiControl) 
 	{
 		if (actionRempes == null) {
 			actionRempes =  new ActionRempes();
+			actionRempes.guiControl = guiControl;
 		} 
 		return actionRempes;
 	}
 
 	public ParamAccess initData() {
-		ParamAccess param = new ParamAccess();
+		final ParamAccess param = new ParamAccess();
 
 		param.setPeriferique("mon ordinateur");
 		Planning semaine = new Planning();
 
-		Day day1= new Day ("Lundi");
-		Day day2= new Day ("Mardi");
-		Day day3= new Day ("Mercredi");
-		Day day4= new Day ("Jeudi");
-		Day day5= new Day ("Vendredi");
-		Day day6= new Day ("Samedi");
-		Day day7= new Day ("Dimanche");
-		Day day8= new Day ("Special");
+		final DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+		String weekdays[] = dfs.getWeekdays();
 
-		semaine.setDay(0, day1);
-		semaine.setDay(1, day2);
-		semaine.setDay(2, day3);
-		semaine.setDay(3, day4);
-		semaine.setDay(4, day5);
-		semaine.setDay(5, day6);
-		semaine.setDay(6, day7);
-		semaine.setDay(7, day8);
+		semaine.setDay(0, new Day (weekdays[Calendar.MONDAY]));
+		semaine.setDay(1, new Day (weekdays[Calendar.TUESDAY]));
+		semaine.setDay(2, new Day (weekdays[Calendar.WEDNESDAY]));
+		semaine.setDay(3, new Day (weekdays[Calendar.THURSDAY]));
+		semaine.setDay(4, new Day (weekdays[Calendar.THURSDAY]));
+		semaine.setDay(5, new Day (weekdays[Calendar.SATURDAY]));
+		semaine.setDay(6,  new Day (weekdays[Calendar.SUNDAY]));
+		semaine.setDay(7, new Day ("Special"));
 
 		param.setPlanning(semaine);
 		return param;
@@ -59,7 +58,7 @@ public class ActionRempes implements Action {
 
 		if (e.getActionCommand().equals(MenuRempes.REFRESH)) {
 			System.out.println("Demande refresh");		
-			ThreadRefreshAccess.refreshParamAcces();
+			ThreadRefreshAccess.getInstance(guiControl).refreshParamAcces();
 		}	
 		else if (e.getActionCommand().equals(MenuRempes.ALERTE)) {
 			System.out.println("Demande Alerte");		

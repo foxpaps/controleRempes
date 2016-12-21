@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -22,18 +24,20 @@ import controleRempes.data.ParamAccess;
 
 public class MainPanel extends JPanel {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 1L;
 
-	private JLabel peripherique = null;
-	private JLabel authorizationTmp = null;
+	public static final ResourceBundle MESSAGES_BUNDLE = ResourceBundle.getBundle("properties.ihm.messages", Locale.getDefault());
 
-	private JCheckBox cb1 = new JCheckBox("Utiliser la planification");
-	private JCheckBox cb2 = new JCheckBox("Toujours bloquer");
-	private JCheckBox cb3 = new JCheckBox("Toujours utiliser l'accés web");
-	private JCheckBox cb4 = new JCheckBox("Toujours tout autoriser");
+	
+	private JLabel peripherique = null;
+	private JLabel authorizationTmp = new JLabel(MESSAGES_BUNDLE.getString("ALLOW_TMP"));
+
+	private JCheckBox cb1 = new JCheckBox(MESSAGES_BUNDLE.getString("ALWAYS_PLANNING"));
+	private JCheckBox cb2 = new JCheckBox(MESSAGES_BUNDLE.getString("ALWAYS_LOCK"));
+	private JCheckBox cb3 = new JCheckBox(MESSAGES_BUNDLE.getString("ALWAYS_WEB_ACCES"));
+	private JCheckBox cb4 = new JCheckBox(MESSAGES_BUNDLE.getString("ALWAYS_ALLOW_ACCES"));
+
 
 	public MainPanel(ParamAccess param) {
 		super();
@@ -47,7 +51,6 @@ public class MainPanel extends JPanel {
 		filtrage.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(filtrage);
 
-		authorizationTmp = new JLabel("Aucune authorisation temporaire défini actuellement.");
 		authorizationTmp.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(authorizationTmp);
 
@@ -59,8 +62,8 @@ public class MainPanel extends JPanel {
 	private JPanel createPerifPanel () {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1,2));
-		panel.add(new JLabel("Périférique : "));
-		peripherique = new JLabel("mon pc");
+		panel.add(new JLabel(MESSAGES_BUNDLE.getString("DEVICE")));
+		peripherique = new JLabel(MESSAGES_BUNDLE.getString("DEFAULT_DEVICE"));
 		panel.add(peripherique);
 
 		return panel;
@@ -70,7 +73,6 @@ public class MainPanel extends JPanel {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2,2));
-		//panel.add(new JLabel("Type de filtrage : "), gbc);
 		panel.add(cb1);
 		panel.add(cb2);
 		panel.add(cb3);
@@ -82,7 +84,7 @@ public class MainPanel extends JPanel {
 		cb4.setEnabled(false);
 
 		Border border = BorderFactory.createLineBorder(Color.black);
-		TitledBorder title = BorderFactory.createTitledBorder(border, "Type de filtrage : ");
+		TitledBorder title = BorderFactory.createTitledBorder(border, MESSAGES_BUNDLE.getString("FILTER_TYPE"));
 		panel.setBorder(title);
 		return panel;	
 	}
@@ -172,18 +174,17 @@ public class MainPanel extends JPanel {
 	}
 
 	public void updateTmpMode(ParamAccess param) {
-		// TODO Auto-generated method stub
 		String texte;
 		int expire = param.getTmpModeExpire();
 
 		switch (param.getTmpMode())  {
 		case allowed:
-			texte = "Autorisation temporaire : " ;
+			texte =  MESSAGES_BUNDLE.getString("ALLOW_TMP");
 			texte += expire;
 			authorizationTmp.setForeground(Color.green);
 			break;
 		case denied:
-			texte = "Interdiction temporaire : ";
+			texte =  MESSAGES_BUNDLE.getString("PROHIBIT_TMP");
 			texte += expire;
 			authorizationTmp.setForeground(Color.red);
 			break;
@@ -193,13 +194,13 @@ public class MainPanel extends JPanel {
 			authorizationTmp.setForeground(Color.blue);
 			break;
 		default:
-			texte = "Aucune authorisation temporaire défini actuellement.";
+			texte =  MESSAGES_BUNDLE.getString("NO_ALLOW_TMP");
 			authorizationTmp.setForeground(Color.black);
 			break;
 
 		}		
 		if (expire==0) {
-			texte = "Aucune authorisation temporaire défini actuellement.";
+			texte =  MESSAGES_BUNDLE.getString("NO_ALLOW_TMP");
 			authorizationTmp.setForeground(Color.black);	
 		}  
 		authorizationTmp.setText(texte);

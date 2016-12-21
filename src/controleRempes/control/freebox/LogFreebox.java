@@ -1,4 +1,4 @@
-package controleRempes.control;
+package controleRempes.control.freebox;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -41,19 +43,36 @@ public class LogFreebox implements Action {
 
 	private static String TOKEN_FILE = "AppToken.txt";
 
-	private static String APP_NAME = "ControlePapa";
+	private static String APP_NAME = "ControleRempes";
 	private static String APP_VERSION = "V1.0";
 
 	public enum statusAuthorize {unknown,pending,timeout,granted,denied};
 
 	private String currentSession = null;
 
+	private GuiControl guiControl = null;
+
+	public static final ResourceBundle MESSAGES_BUNDLE = ResourceBundle.getBundle("properties.ihm.messages", Locale.getDefault());
+
+
+	/**
+	 * Si cette fonction n'est pas appelée en premier ca va planté
+	 * @param guiControl
+	 * @return
+	 */
+	public static Action getInstance(final GuiControl guiControl) {
+		if (logFreebox == null) {
+			logFreebox =  new LogFreebox();
+		} 
+		logFreebox.guiControl = guiControl;
+		return logFreebox;
+	}
+
 	public static LogFreebox getInstance() 
 	{
 		if (logFreebox == null) {
 			logFreebox =  new LogFreebox();
 		} 
-
 		return logFreebox;
 	}
 
@@ -75,7 +94,7 @@ public class LogFreebox implements Action {
 			//System.out.println("TokenAuthorize = " + jsonToken.toString());
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			guiControl.showError(e.getMessage());
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -88,10 +107,10 @@ public class LogFreebox implements Action {
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e1) {
-			MainControleRempes.showError(e1.getMessage()); 
+			guiControl.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
-		
+
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost(URL_AUTHORIZE);
 		httpPost.addHeader("content-type", "application/json");		
@@ -102,11 +121,11 @@ public class LogFreebox implements Action {
 			StringEntity params =new StringEntity(paramString);
 			httpPost.setEntity(params);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			guiControl.showError(e.getMessage());
 			e.printStackTrace();
 		}
 
-		MainControleRempes.showInfo("Un message sur votre Freebox demandant l'authorisation pour l'acces de l'application doit apparaître.\n Merci d'accepter en utlisant l'écran de votre Freebox");
+		guiControl.showInfo(MESSAGES_BUNDLE.getString("INFO_AUTHORIZE_BOX"));
 		System.out.println("executing request " + httpPost.getRequestLine());
 
 		try (CloseableHttpResponse response = httpclient.execute(httpPost)){
@@ -120,12 +139,12 @@ public class LogFreebox implements Action {
 			try  (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TOKEN_FILE), "utf-8"))) {
 				writer.write(retSrc);
 			} catch (IOException e) {				
-				MainControleRempes.showError(e.getMessage()); 
+				guiControl.showError(e.getMessage()); 
 				e.printStackTrace();
 			}	
 
 		} catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
+			guiControl.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -151,10 +170,10 @@ public class LogFreebox implements Action {
 				System.out.println(result.toString());
 			}
 		} catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
+			guiControl.showError(e.getMessage()); 
 			e.printStackTrace();
 		} catch (Exception e1) {
-			MainControleRempes.showError(e1.getMessage()); 
+			guiControl.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}
 		return result;
@@ -171,7 +190,7 @@ public class LogFreebox implements Action {
 			StringEntity params =new StringEntity(paramString);
 			httpPost.setEntity(params);
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+			guiControl.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		try (CloseableHttpResponse response = httpclient.execute(httpPost)){
@@ -182,7 +201,7 @@ public class LogFreebox implements Action {
 			jsonToken = new JSONObject(retSrc);
 		}
 		catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
+			guiControl.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -190,12 +209,11 @@ public class LogFreebox implements Action {
 
 	public JSONObject login() {
 		JSONObject tokenAuthorize = null;;
-		//String session = null;
 		try {
 			tokenAuthorize = readTokenAuthorize();
 		} catch (FileNotFoundException e) {
-			MainControleRempes.showError(e.getMessage());
-			MainControleRempes.showInfo("Demander l'autorisation, puis relogguer ...");
+			guiControl.showError(e.getMessage());			
+			guiControl.showInfo(MESSAGES_BUNDLE.getString("ASK_AUTHORIZE_BOX"));
 			tokenAuthorize = authorize();
 		}
 
@@ -208,7 +226,7 @@ public class LogFreebox implements Action {
 		String app_token = resultAuthorize.getString("app_token");
 
 		// repeat ??
-		// get the challenge toen
+		// get the challenge token
 		JSONObject challengeToken = getChallengeToken(resultAuthorize);
 		boolean succes = challengeToken.getBoolean("success");
 
@@ -238,11 +256,10 @@ public class LogFreebox implements Action {
 				currentSession = resultSession.getString("session_token");
 				permission = true;
 			} else {
-				MainControleRempes.showInfo("L'appliation \"Dady\", n'a pas l'accés au contrôle parentale.\nDemande l'acces de l'application à tes parents.");
+				guiControl.showInfo(MESSAGES_BUNDLE.getString("ASK_PARENT_AUTORIZE"));
 			}
 		}
 		return permission;
-
 	}
 
 	public JSONObject logout() {
@@ -259,7 +276,7 @@ public class LogFreebox implements Action {
 			jsonToken = new JSONObject(retSrc);
 		}
 		catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
+			guiControl.showError(e.getMessage()); 
 			e.printStackTrace();
 		}
 		return jsonToken;
@@ -295,16 +312,16 @@ public class LogFreebox implements Action {
 			JSONObject resultAutorise = authorize();
 
 			if (resultAutorise.getBoolean("success")) {
-				MainControleRempes.showInfo("Autorization accord�e.");
+				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_OK"));
 			} else {
-				MainControleRempes.showInfo("Autorization refus�e.");
+				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_KO"));
 			}			 
-		} else if (e.getActionCommand().equals(MenuRempes.CONNEXION)) {
+		} else if (e.getActionCommand().equals(MenuRempes.CONNECTION_FREE)) {
 			System.out.println("Demande connexion");
 
 			connexion();
 
-		} else if (e.getActionCommand().equals(MenuRempes.DECONNEXION)) {
+		} else if (e.getActionCommand().equals(MenuRempes.DECONNECTION)) {
 			System.out.println("Demande deconnexion");
 			//JSONObject result =  
 			logout();
@@ -359,12 +376,13 @@ public class LogFreebox implements Action {
 	public void connexion() {
 		JSONObject sessionToken = login();
 
-		if ( checkPermission(sessionToken)) {
+		if ( sessionToken!=null && checkPermission(sessionToken)) {
 			MainControleRempes.getInstance().getStatusPanel().setStatusConnexion("Connexion accordée.");
 			//MainControlePapa.showInfo("Connexion accordée.");
 		} else {
-			MainControleRempes.getInstance().getStatusPanel().setStatusConnexion("Echec de connection.");
-			MainControleRempes.showError("Echec de connection.");
+			MainControleRempes.getInstance().getStatusPanel().setStatusConnexion("Echec de connexion.");
+			guiControl.showError(MESSAGES_BUNDLE.getString("CONECTION_FAIL"));
 		}
 	}
+
 }

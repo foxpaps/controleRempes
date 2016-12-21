@@ -6,7 +6,7 @@ import controleRempes.data.ParamAccess.StatusAutorisation;
 
 public class Planning {
 
-	public enum TypeFiltrage { Planification, Bloque, AccesWeb, Autorise , Indefini};
+	public enum TypeFiltrage { Planification, Bloque, AccesWeb, Autorise, Indefini};
 	private TypeFiltrage _filtrage;
 	
 	private Day[] _days = new Day[8];

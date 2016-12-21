@@ -6,12 +6,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-
 public class MenuRempes extends JMenuBar 
 {
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 1L;
 	private JMenu menuConnexion=null ;
 	private JMenuItem itemAuthorisation=null ;
@@ -19,22 +16,19 @@ public class MenuRempes extends JMenuBar
 	private JMenuItem itemDeconnexion=null ;
 
 	
-	public static String REFRESH = "Rafraichir";
-	public static String ALERTE = "Alerte";
-	//public static String TEST = "Test";
+	public static String REFRESH = MainPanel.MESSAGES_BUNDLE.getString("REFRESH");
+	public static String ALERTE = MainPanel.MESSAGES_BUNDLE.getString("ALERTE");
 	
-	public static String AUTORIZATION = "Authorisation Freebox";
-	public static String CONNEXION = "Connexion Freebox";
-	public static String DECONNEXION = "Deconnexion Freebox";
+	public static String AUTORIZATION = MainPanel.MESSAGES_BUNDLE.getString("AUTORIZATION");
+	public static String CONNECTION_FREE = MainPanel.MESSAGES_BUNDLE.getString("CONNECTION_FREE");
+	public static String DECONNECTION = MainPanel.MESSAGES_BUNDLE.getString("CONNECTION_FREE");
 
-	/*menuBar.setSize(800, 100);
-	menuBar.add(getmenuFile());*/
 
 	public MenuRempes(Action logFreebox, Action action) 
 	{
 		super();
 		
-		JMenu menuAction = new JMenu("Action");
+		JMenu menuAction = new JMenu(MainPanel.MESSAGES_BUNDLE.getString("MENU_ACTION"));
 		JMenuItem itemRefresh=new JMenuItem(REFRESH);
 		itemRefresh.addActionListener(action);
 		menuAction.add(itemRefresh);
@@ -43,22 +37,20 @@ public class MenuRempes extends JMenuBar
 		itemAlerte.addActionListener(action);
 		menuAction.add(itemAlerte);
 		
-		add(menuAction);
-		
-		
+		add(menuAction);		
 		//--------------------------
 		
-		menuConnexion = new JMenu("Connexion");
+		menuConnexion = new JMenu(MainPanel.MESSAGES_BUNDLE.getString("CONNECTION"));
 
 		itemAuthorisation=new JMenuItem(AUTORIZATION);
 		itemAuthorisation.addActionListener(logFreebox);
 		menuConnexion.add(itemAuthorisation);
 
-		itemConnexion =new JMenuItem(CONNEXION);
+		itemConnexion =new JMenuItem(CONNECTION_FREE);
 		itemConnexion.addActionListener(logFreebox);
 		menuConnexion.add(itemConnexion);
 
-		itemDeconnexion =new JMenuItem(DECONNEXION);
+		itemDeconnexion =new JMenuItem(DECONNECTION);
 		itemDeconnexion.addActionListener(logFreebox);
 		menuConnexion.add(itemDeconnexion);
 

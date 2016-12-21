@@ -36,8 +36,8 @@ public class Day {
 		return _nom;
 	}
 
-	public void setNom(String _nom) {
-		this._nom = _nom;
+	public void setNom(String nom) {
+		_nom = nom;
 	}
 	
 }

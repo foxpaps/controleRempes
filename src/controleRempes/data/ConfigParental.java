@@ -7,10 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class ConfigParental {
 
+	public static final ResourceBundle MESSAGES_BUNDLE = ResourceBundle.getBundle("properties.data.messages", Locale.getDefault());
+	
 	private static final String FILE_INIT_NAME = "ControlPapa.init";
 
 	private static final String FREQUENCE_REFRESH = "frequenceRefresh";
@@ -27,14 +31,13 @@ public class ConfigParental {
 	private static final String AUTORISATION_BEFORE = "AlerteAutorisationBefore";
 	private static final String AUTORISATION_SOUND = "AlerteAutorisationSound";
 
-	private static final String newline = System.getProperty("line.separator");
+	private static final String NEWLINE = System.getProperty("line.separator");
 
 	private static  ConfigParental _instance = null;
 
-	// frequence de rafraichissement des donn�es du control parental; 5 minutes par defaut
+	// frequence de rafraichissement des données du control parental; 5 minutes par defaut
 	private int frequenceRefresh = 5*60*1000; 
 
-	//private String listeAlerte[] = {"Alerte Bloquage", "Alerte Web Unique", "Alerte Autorisation"};
 	private Alerte alerteBloquage = null;
 	private Alerte alerteWebUnique = null;
 	private Alerte alerteAutorisation = null;
@@ -53,7 +56,7 @@ public class ConfigParental {
 
 			frequenceRefresh = Integer.parseInt(properties.getProperty(FREQUENCE_REFRESH,String.valueOf(frequenceRefresh)));
 
-			alerteBloquage = new Alerte("Alerte Bloquage");
+			alerteBloquage = new Alerte(MESSAGES_BUNDLE.getString("ALERT_BLOKING"));
 			alerteBloquage.setAlerte(Boolean.valueOf(properties.getProperty(BLOQUAGE,"false")));
 			alerteBloquage.setAlerteBloquageBefore(Integer.valueOf(properties.getProperty(BLOQUAGE_BEFORE,"0")));
 			
@@ -64,12 +67,12 @@ public class ConfigParental {
 			
 			alerteBloquage.setAlerteBloquageSound(new File(properties.getProperty(BLOQUAGE_SOUND,"")).getPath());
 
-			alerteWebUnique = new Alerte("Alerte Web Unique");
+			alerteWebUnique = new Alerte(MESSAGES_BUNDLE.getString("ALERT_WEB_ONLY"));
 			alerteWebUnique.setAlerte(Boolean.valueOf(properties.getProperty(WEB_UNIQUE,"false")));
 			alerteWebUnique.setAlerteBloquageBefore(Integer.valueOf(properties.getProperty(WEB_UNIQUE_BEFORE,"0")));
 			alerteWebUnique.setAlerteBloquageSound(new File(properties.getProperty(WEB_UNIQUE_SOUND,"")).getPath());
 
-			alerteAutorisation = new Alerte("Alerte Autorisation");
+			alerteAutorisation = new Alerte(MESSAGES_BUNDLE.getString("ALERT_AUTHORIZATION"));
 			alerteAutorisation.setAlerte(Boolean.valueOf(properties.getProperty(AUTORISATION,"false")));
 			alerteAutorisation.setAlerteBloquageBefore(Integer.valueOf(properties.getProperty(AUTORISATION_BEFORE,"0")));
 			alerteAutorisation.setAlerteBloquageSound(new File(properties.getProperty(AUTORISATION_SOUND,"")).getPath());
@@ -114,27 +117,27 @@ public class ConfigParental {
 	public void saveAlerte() {
 		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE_INIT_NAME),"UTF-8"))) {
 
-			writer.write ("; frequence de rafraichissement des donn�es du control parental en minutes" + newline);
-			writer.write (FREQUENCE_REFRESH + "=" + frequenceRefresh + newline);			
-			writer.write (newline);
+			writer.write (MESSAGES_BUNDLE.getString("REM_FREQUENCY")+ NEWLINE);
+			writer.write (FREQUENCE_REFRESH + "=" + frequenceRefresh + NEWLINE);			
+			writer.write (NEWLINE);
 
-			writer.write (";Alerte Bloquage" + newline);
-			writer.write (BLOQUAGE + "=" + alerteBloquage.getAlerte().toString() + newline);
-			writer.write (BLOQUAGE_BEFORE + "=" + alerteBloquage.getAlerteBefore() + newline);
-			writer.write (BLOQUAGE_SOUND + "=" + alerteBloquage.getAlerteBloquageSoundPath() + newline);
-			writer.write (newline);
+			writer.write (MESSAGES_BUNDLE.getString("REM_ALERT_BLOKING") + NEWLINE);
+			writer.write (BLOQUAGE + "=" + alerteBloquage.getAlerte().toString() + NEWLINE);
+			writer.write (BLOQUAGE_BEFORE + "=" + alerteBloquage.getAlerteBefore() + NEWLINE);
+			writer.write (BLOQUAGE_SOUND + "=" + alerteBloquage.getAlerteBloquageSoundPath() + NEWLINE);
+			writer.write (NEWLINE);
 
-			writer.write (";Alerte Web Unique" + newline);
-			writer.write (WEB_UNIQUE + "=" + alerteWebUnique.getAlerte().toString() + newline);
-			writer.write (WEB_UNIQUE_BEFORE + "=" + alerteWebUnique.getAlerteBefore() + newline);
-			writer.write (WEB_UNIQUE_SOUND + "=" + alerteWebUnique.getAlerteBloquageSoundPath() + newline);
-			writer.write (newline);
+			writer.write (MESSAGES_BUNDLE.getString("REM_ALERT_WEB_ONLY") + NEWLINE);
+			writer.write (WEB_UNIQUE + "=" + alerteWebUnique.getAlerte().toString() + NEWLINE);
+			writer.write (WEB_UNIQUE_BEFORE + "=" + alerteWebUnique.getAlerteBefore() + NEWLINE);
+			writer.write (WEB_UNIQUE_SOUND + "=" + alerteWebUnique.getAlerteBloquageSoundPath() + NEWLINE);
+			writer.write (NEWLINE);
 
-			writer.write (";Alerte Autorisation" + newline);
-			writer.write (AUTORISATION + "=" + alerteAutorisation.getAlerte().toString() + newline);
-			writer.write (AUTORISATION_BEFORE + "=" + alerteAutorisation.getAlerteBefore() + newline);
-			writer.write (AUTORISATION_SOUND + "=" + alerteAutorisation.getAlerteBloquageSoundPath() + newline);	
-			writer.write (newline);
+			writer.write (MESSAGES_BUNDLE.getString("REM_ALERT_AUTHORIZATION") + NEWLINE);
+			writer.write (AUTORISATION + "=" + alerteAutorisation.getAlerte().toString() + NEWLINE);
+			writer.write (AUTORISATION_BEFORE + "=" + alerteAutorisation.getAlerteBefore() + NEWLINE);
+			writer.write (AUTORISATION_SOUND + "=" + alerteAutorisation.getAlerteBloquageSoundPath() + NEWLINE);	
+			writer.write (NEWLINE);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

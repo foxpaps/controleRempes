@@ -16,8 +16,8 @@ public class StatusPanel extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -3440142521770326421L;
-	private JLabel statusAutorisation = new JLabel("status autorisation");
-	private JLabel statusConnexion = new JLabel("connexion en cours");
+	private JLabel statusAutorisation = new JLabel(MainPanel.MESSAGES_BUNDLE.getString("AUTHORIZATION_STATE"));
+	private JLabel statusConnexion = new JLabel(MainPanel.MESSAGES_BUNDLE.getString("CONNECTING"));
 	
 	public StatusPanel(JFrame frame) {
 		super();

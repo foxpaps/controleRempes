@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Calendar;
+import java.util.Locale;
 
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,24 +18,27 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import controleRempes.control.ActionRempes;
-import controleRempes.control.LogFreebox;
+import controleRempes.control.GuiControlRempes;
 import controleRempes.control.ThreadCheckAlertes;
 import controleRempes.control.ThreadRefreshAccess;
+import controleRempes.control.freebox.LogFreebox;
 import controleRempes.data.ParamAccess;
 import controleRempes.data.ParamAccess.StatusAutorisation;
 import controleRempes.data.Planning;
+import controleRempes.ihm.AlerteDialogue;
 import controleRempes.ihm.MainPanel;
 import controleRempes.ihm.MenuRempes;
 import controleRempes.ihm.StatusPanel;
 
-public class MainControleRempes extends JFrame
+public class MainControleRempes extends JFrame implements GuiControlRempes
 {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5161193878470839549L;
 
+	/** only french */
+	public static final Locale locale_FR = new Locale("fr","FR");
+
+	public static final String  PARENTS_ICON = "/images/parents.png";
 	public static MainControleRempes mainFrame = null;
 
 	private MainPanel mainPanCommand =null ;	// panel principal
@@ -41,10 +47,12 @@ public class MainControleRempes extends JFrame
 	
 	private ParamAccess paramAccess = null;
 
+	
 	public static MainControleRempes getInstance() {
 		if (mainFrame==null) {
 			mainFrame = new MainControleRempes();
 		}	
+
 		return mainFrame;
 	}
 
@@ -56,8 +64,8 @@ public class MainControleRempes extends JFrame
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		JDialog.setDefaultLookAndFeelDecorated(true);
 
-		paramAccess = ActionRempes.getInstance().initData(); // init des données par defaut
-		menuBar = new MenuRempes( LogFreebox.getInstance(),ActionRempes.getInstance());
+		paramAccess = ActionRempes.getInstance(this).initData(); // init des données par defaut
+		menuBar = new MenuRempes( LogFreebox.getInstance(this),ActionRempes.getInstance(this));
 		mainPanCommand = new MainPanel(paramAccess);
 		mainPanCommand.setPreferredSize(new Dimension(800,300));
 
@@ -111,13 +119,17 @@ public class MainControleRempes extends JFrame
 		return statusPanel;
 	}
 	
-	public static void showError(String message) {
-		JOptionPane.showMessageDialog(mainFrame, message, "Dialog",
+	public void showError(final String message) {
+		JOptionPane.showMessageDialog(mainFrame, message, "Erreur",
 				JOptionPane.ERROR_MESSAGE);
 	}
-	public static void showInfo(String message) {
+	public void showInfo(final String message) {
 		JOptionPane.showMessageDialog(mainFrame, message, "Dialog",
 				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public void refreshGui() {
+		this.repaint();
 	}
 
 	public static void main(String[] args) {
@@ -128,13 +140,18 @@ public class MainControleRempes extends JFrame
 			{
 				mainFrame =new MainControleRempes();
 				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) ) ;
-				Image icone = Toolkit.getDefaultToolkit().getImage("parents.png");
-				mainFrame.setIconImage(icone);
-
+				final URL url_open = AlerteDialogue.class.getResource(PARENTS_ICON);
+				try {
+					Image openImage = ImageIO.read(url_open);
+					mainFrame.setIconImage(openImage);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				mainFrame.setVisible(true);
 
 				LogFreebox.getInstance().connexion();
-				ThreadRefreshAccess.refresh();
+				ThreadRefreshAccess.refresh(mainFrame);
 				ThreadCheckAlertes.refresh();
 				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)) ;
 			}

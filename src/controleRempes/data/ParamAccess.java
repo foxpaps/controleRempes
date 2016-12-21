@@ -55,21 +55,20 @@ public class ParamAccess {
 	}
 
 	static public String GetStatusNameAutorisation(StatusAutorisation status) {
-		String name = "Status de connection : Indéfini";
+		String name = ConfigParental.MESSAGES_BUNDLE.getString("UNDEFINED_STATUS_CONNECTION");
 		switch (status)  {
 		case allowed:
-			 name = "Status de connection : Autorisé";
+			 name = ConfigParental.MESSAGES_BUNDLE.getString("AUTHORIZED_STATUS");
 			break;
 		case denied:
-			 name = "Status de connection : Interdit";
+			 name = ConfigParental.MESSAGES_BUNDLE.getString("FORBIDEN_STATUS_CONNECTION");
 			break;
 		case webonly:
-			 name = "Status de connection : Web seulemnt";
+			 name = ConfigParental.MESSAGES_BUNDLE.getString("WEB_ONLY_STATUS_CONNECTION");
 			break;
 		default:
 			break;
 		}
 		return name;
 	}
-	
 }

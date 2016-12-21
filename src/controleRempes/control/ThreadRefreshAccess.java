@@ -6,27 +6,47 @@ import java.net.UnknownHostException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import controleRempes.MainControleRempes;
+import controleRempes.control.freebox.FreeboxException;
+import controleRempes.control.freebox.GetFilters;
 import controleRempes.data.ConfigParental;
 import controleRempes.data.Day;
 import controleRempes.data.ParamAccess;
-import controleRempes.data.Planning;
 import controleRempes.data.ParamAccess.SchedulingMode;
 import controleRempes.data.ParamAccess.StatusAutorisation;
+import controleRempes.data.Planning;
 import controleRempes.data.Planning.TypeFiltrage;
 
 public class ThreadRefreshAccess implements Runnable  {
 
-
-	public static void refresh() {
-		(new Thread(new ThreadRefreshAccess())).start();
+	private static ThreadRefreshAccess refreshAccess = null;
+	
+	private GuiControlRempes guiControl = null;
+ 
+	private ThreadRefreshAccess()  {		
+	}
+	
+	/**
+	 * Si cette fonction n'est pas appelée en premier ca va planté
+	 * @param guiControl
+	 * @return
+	 */
+	public static ThreadRefreshAccess getInstance(final GuiControlRempes guiControl) {
+		if (refreshAccess == null) {
+			refreshAccess =  new ThreadRefreshAccess();
+			refreshAccess.guiControl = guiControl;
+		} 
+		
+		return refreshAccess;
+	}
+	
+	public static void refresh(final GuiControlRempes guiControl) {
+		(new Thread(getInstance(guiControl))).start();
 	}
 
 	@Override
 	public void run() {
 
 		try {
-
 			int periode = ConfigParental.getInstance().getFrequenceRefresh()*60*1000;
 			while (true) {
 				long beginTime  = System.currentTimeMillis();
@@ -41,20 +61,28 @@ public class ThreadRefreshAccess implements Runnable  {
 		}
 	}
 
-	static public void refreshParamAcces() {
-		String hostName = "monPc"; // default name
+	synchronized public void refreshParamAcces() {
+		String hostName  = "monPc"; // default name
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e1) {
-			MainControleRempes.showError(e1.getMessage()); 
+			guiControl.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
+		
 		hostName = "Matth-PC"; //TODO remove it
 
-		ParamAccess param = MainControleRempes.getInstance().getParamAccess();		
+		ParamAccess param = guiControl.getParamAccess();		
 		param.setPeriferique(hostName);
 
-		JSONObject filter = GetFilters.getCurrentFilter(hostName);
+		
+		JSONObject filter = null;
+		try {
+			filter = GetFilters.getCurrentFilter(hostName);
+		} catch (FreeboxException e) {
+			guiControl.showError(e.getMessage());
+			e.printStackTrace();
+		}
 		if (filter!=null) {
 			int id = filter.getInt("id");
 
@@ -64,17 +92,17 @@ public class ThreadRefreshAccess implements Runnable  {
 			case planning :
 				refreshPlaning(param,id);
 				param.getPlanning().setFiltrage(TypeFiltrage.Planification);
-				MainControleRempes.getInstance().updatePlanning(param);			
+				guiControl.updatePlanning(param);			
 				break;
 			case temporary :
 				refreshPlaning(param,id);
-				MainControleRempes.getInstance().updatePlanning(param);			
+				guiControl.updatePlanning(param);			
 				System.out.println("temporary");
 				break;
 			case forced :
 				refreshPlaning(param,id);
 				refreshForcedMode(param,filter);
-				MainControleRempes.getInstance().updatePlanning(param);	
+				guiControl.updatePlanning(param);	
 				System.out.println("forced");
 				break;
 			case Indefini:
@@ -85,11 +113,11 @@ public class ThreadRefreshAccess implements Runnable  {
 
 			//todo invokelater
 			refreshTemporary(param,filter);
-			MainControleRempes.getInstance().updateTmpMode(param);
+			guiControl.updateTmpMode(param);
 		}
-		MainControleRempes.getInstance().updateStatus();
+		guiControl.updateStatus();
 
-		MainControleRempes.getInstance().repaint();
+		guiControl.refreshGui();
 	}
 
 
@@ -121,11 +149,16 @@ public class ThreadRefreshAccess implements Runnable  {
 
 	}
 
-	static private void refreshPlaning(ParamAccess param, int id) {
+	private void refreshPlaning(ParamAccess param, int id) {
 		JSONObject planning = null; 
 		JSONObject resultPlanning = null;
 
-		planning = GetFilters.getaPlaning(id);
+		try {
+			planning = GetFilters.getaPlaning(id);
+		} catch (FreeboxException e) {
+			guiControl.showError(e.getMessage());
+			e.printStackTrace();
+		}
 		if (planning.getBoolean("success")) {
 			resultPlanning = planning.getJSONObject("result");				
 			Planning semaine = param.getPlanning();

@@ -41,19 +41,21 @@ import controleRempes.data.ConfigParental;
 
 public class AlerteDialogue extends JDialog  implements ActionListener {
 
-	/**
-	 * 
-	 */
+	/** */
 	private static final long serialVersionUID = 1L;
 
-	private static final String PREVIENT = "Prévenir avant (min):";
-	private static final String AUDIO_FILE = "Fichier Audio:";
-	public static final String VALID_DIALOG = "Valider";
-	public static final String UNDO_DIALOG = "Annuler";
+	private static final String TITLE_ALERTE = "TITLE_ALERTE";
+	private static final String PREVIENT = "PREVIENT";
+	private static final String AUDIO_FILE = "AUDIO_FILE";
+	public static final String VALID_DIALOG = "VALID_DIALOG";
+	public static final String UNDO_DIALOG = "UNDO_DIALOG";
+	public static final String SOUND_FILE = "SOUND_FILE";
+	public static final String TITLE_BORDER = "TITLE_BORDER";
+	public static final String DEFAULT_VALUE = "DEFAULT_VALUE";
+	
+	public static final String  OPEN_ICON = "/images/folder-open-document-music-icon.png";
+	public static final String  MUSIC_ICON = "/images/music-icon.png";
 
-	public static final String  openIcon = "folder-open-document-music-icon.png";
-
-	//String listeAlerte[] = {"Alerte Bloquage", "Alerte Web Unique", "Alerte Autorisation"};
 	JCheckBox activateBloquage = new JCheckBox();
 	JCheckBox activateWebUnique = new JCheckBox();
 	JCheckBox activateAutorisation = new JCheckBox();
@@ -78,9 +80,9 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 	JButton testsound2 = new JButton(TEST_BUTTON_ICON);
 	JButton testsound3 = new JButton(TEST_BUTTON_ICON);
 
-	JButton defaultBlocage = new JButton("valeur par défaut");
-	JButton defaultWebUnique = new JButton("valeur par défaut");
-	JButton defaultAutorisation = new JButton("valeur par défaut");
+	JButton defaultBlocage = new JButton(MainPanel.MESSAGES_BUNDLE.getString(DEFAULT_VALUE));
+	JButton defaultWebUnique = new JButton(MainPanel.MESSAGES_BUNDLE.getString(DEFAULT_VALUE));
+	JButton defaultAutorisation = new JButton(MainPanel.MESSAGES_BUNDLE.getString(DEFAULT_VALUE));
 
 	JButton valider = null;
 	JButton annuler = null;
@@ -91,12 +93,13 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 	static {
 		Icon openButtonIcon = null;
 		Icon testButtonIcon = null;
+
 		try {			
-			final URL url_open = AlerteDialogue.class.getResource("/folder-open-document-music-icon.png");
+			final URL url_open = AlerteDialogue.class.getResource(OPEN_ICON);
 			final Image openImage = ImageIO.read(url_open);
 			openButtonIcon = new ImageIcon ( openImage);
 
-			final URL url_test = AlerteDialogue.class.getResource("/music-icon.png");
+			final URL url_test = AlerteDialogue.class.getResource(MUSIC_ICON);
 			final Image testImage = ImageIO.read(url_test);
 			testButtonIcon = new ImageIcon ( testImage);
 
@@ -105,12 +108,13 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		}
 		OPEN_BUTTON_ICON = openButtonIcon;
 		TEST_BUTTON_ICON = testButtonIcon;
-	}
+		}
 
 	public AlerteDialogue(JFrame parent, ConfigParental config) {
 		super(parent);		
 		setModal(true);
-		setTitle("Config of Dad is Watching you");
+
+		setTitle(MainPanel.MESSAGES_BUNDLE.getString(TITLE_ALERTE));
 		setLocation(parent.getX()+50, parent.getY()+50);
 
 		JPanel panel = new JPanel();		
@@ -174,7 +178,7 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		panelAlerte.setLayout(new GridBagLayout());	
 
 		Border border = BorderFactory.createLineBorder(Color.black);
-		TitledBorder title = BorderFactory.createTitledBorder(border, "Paramétrage " + alerte.getAlerteName());
+		TitledBorder title = BorderFactory.createTitledBorder(border,MainPanel.MESSAGES_BUNDLE.getString(TITLE_BORDER) + alerte.getAlerteName());
 		panelAlerte.setBorder(title);
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -188,13 +192,13 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		panelAlerte.add(activate,gbc);
 
 		gbc.gridx = 0;	gbc.gridy++;
-		panelAlerte.add(new JLabel(PREVIENT),gbc);
+		panelAlerte.add(new JLabel(MainPanel.MESSAGES_BUNDLE.getString(PREVIENT)),gbc);
 		gbc.gridx++;
 		//timeBefore.setSize(50, 80);
 		panelAlerte.add(timeBefore,gbc);
 
 		gbc.gridx=0;gbc.gridy++;
-		panelAlerte.add(new JLabel(AUDIO_FILE),gbc);
+		panelAlerte.add(new JLabel(MainPanel.MESSAGES_BUNDLE.getString(AUDIO_FILE)),gbc);
 		gbc.gridx++;
 		panelAlerte.add(sound,gbc);
 		gbc.gridx++;
@@ -205,7 +209,7 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		panelAlerte.add(testsound,gbc);
 
 		gbc.gridx=0;gbc.gridy++;
-		defaultAlerte.setFont(new Font("Dialog", Font.PLAIN, 10));
+		defaultAlerte.setFont(new Font(Font.DIALOG, Font.PLAIN, 10));
 		defaultAlerte.addActionListener(this);
 		panelAlerte.add(defaultAlerte, gbc);
 
@@ -215,10 +219,10 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 	private JPanel createAlerteCtrlDialogue() {
 		JPanel ctrlDialogue = new JPanel();	
 		ctrlDialogue.setLayout(new GridLayout(1,2));
-		valider = new JButton(VALID_DIALOG);
+		valider = new JButton(MainPanel.MESSAGES_BUNDLE.getString(VALID_DIALOG));
 		valider.addActionListener(this);
 		ctrlDialogue.add(valider);
-		annuler = new JButton(UNDO_DIALOG);	
+		annuler = new JButton(MainPanel.MESSAGES_BUNDLE.getString(UNDO_DIALOG));	
 		annuler.addActionListener(this);
 		ctrlDialogue.add(annuler);
 		return ctrlDialogue;
@@ -252,7 +256,7 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 			getData2IhmAutorisation(config);
 		} else {
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Sound Files", "mp3", "wav","wma"));
+			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(MainPanel.MESSAGES_BUNDLE.getString(SOUND_FILE), "mp3", "wav","wma"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
 			int returnVal = fileChooser.showOpenDialog(this);
 
@@ -277,7 +281,7 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 	}
 
 	private void testSound(Path soundPath) {
-		System.out.println("sound path : " + soundPath.toString() );
+		//System.out.println("sound path : " + soundPath.toString() );
 
 		if (soundPath.toString().endsWith(".wma")) {
 			playWma (soundPath);
@@ -292,6 +296,8 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundPath.toFile());
 			AudioFormat audioFormat = audioInputStream.getFormat();
+			
+			// TODO
 			System.out.println(audioFormat);
 
 			/*DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);

@@ -7,13 +7,13 @@ import controleRempes.data.ParamAccess;
 
 public class TableSemaine extends AbstractTableModel  {
 
-
-	/**
-	 * 
-	 */
+	/**	 */
 	private static final long serialVersionUID = -7120881414463444403L;
 
 	private ParamAccess _parametre;
+	// TODO
+//	DateFormatSymbols dfs = new DateFormatSymbols(usersLocale);
+//	String weekdays[] = dfs.getWeekdays();
 	
 	private final String[] entetes = { "Jours", "0", "", "1", "", "2", "", "3", "", "4", "", "5", "", "6", "", "7", "", "8", "", "9", "",
 			"10", "", "11", "", "12", "", "13", "", "14", "", "15", "", "16", "", "17", "", "18", "",

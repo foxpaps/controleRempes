@@ -1,6 +1,4 @@
-package controleRempes.control;
-
-import java.io.IOException;
+package controleRempes.control.freebox;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -11,14 +9,12 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import controleRempes.MainControleRempes;
-
 public class GetFilters {
 
 	private static String URL_FILTERS =  "http://mafreebox.freebox.fr/api/v3/parental/filter/";
 	private static String URL_PLANING = "/planning";
 
-	public static JSONObject getfilters() {
+	public static JSONObject getfilters() throws FreeboxException {
 
 		//GET /api/v3/parental/filter/
 		JSONObject result = null;
@@ -38,18 +34,14 @@ public class GetFilters {
 				result = new JSONObject(retSrc); //Convert String to JSON Object
 				System.out.println(result.toString());
 			}
-		} catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
-			e.printStackTrace();
-		} catch (Exception e1) {
-			MainControleRempes.showError(e1.getMessage()); 
-			e1.printStackTrace();
+		} catch (Exception e) {
+			throw new FreeboxException("Error while executing http request",e);
 		}
 		return result;
 	}
 
 	
-	public static JSONObject getaFilter(int id) {
+	public static JSONObject getaFilter(int id) throws FreeboxException {
 		//GET /api/v3/parental/filter/{id}
 		JSONObject result = null;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -68,17 +60,13 @@ public class GetFilters {
 				result = new JSONObject(retSrc); //Convert String to JSON Object
 				System.out.println(result.toString());
 			}
-		} catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
-			e.printStackTrace();
-		} catch (Exception e1) {
-			MainControleRempes.showError(e1.getMessage()); 
-			e1.printStackTrace();
+		} catch (Exception e) {
+			throw new FreeboxException("Error while executing http request",e);
 		}
 		return result;
 	}
 
-	public static JSONObject getaPlaning(int id) {
+	public static JSONObject getaPlaning(int id) throws FreeboxException {
 		//GET /api/v3/parental/filter/{id}
 		JSONObject result = null;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -97,17 +85,13 @@ public class GetFilters {
 				result = new JSONObject(retSrc); //Convert String to JSON Object
 				System.out.println(result.toString());
 			}
-		} catch (IOException e) {
-			MainControleRempes.showError(e.getMessage()); 
-			e.printStackTrace();
-		} catch (Exception e1) {
-			MainControleRempes.showError(e1.getMessage()); 
-			e1.printStackTrace();
+		} catch (Exception e) {
+			throw new FreeboxException("Error while executing http request",e);
 		}
 		return result;
 	}
 	
-	static public JSONObject getCurrentFilter(final String hostName) {
+	static public JSONObject getCurrentFilter(final String hostName) throws FreeboxException {
 		JSONObject result = null;
 				
 		JSONObject filters = getfilters();
@@ -125,7 +109,6 @@ public class GetFilters {
 					    	  return aFilter;
 					      }
 					}
-
 			}
 		}
 		
