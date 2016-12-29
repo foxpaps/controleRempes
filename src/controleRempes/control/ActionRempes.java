@@ -7,21 +7,24 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import javax.swing.Action;
-import javax.swing.JFrame;
+
+import org.json.JSONObject;
 
 import controleRempes.MainControleRempes;
+import controleRempes.control.freebox.LogFreebox;
 import controleRempes.data.ConfigParental;
 import controleRempes.data.Day;
 import controleRempes.data.ParamAccess;
 import controleRempes.data.Planning;
-import controleRempes.ihm.AlerteDialogue;
+import controleRempes.ihm.AlerteDialog;
+import controleRempes.ihm.HelpConnectionDialog;
 import controleRempes.ihm.MenuRempes;
 
 public class ActionRempes implements Action {
 
 	private static ActionRempes actionRempes = null;
 	private GuiControlRempes guiControl = null;
-	
+
 	public static ActionRempes getInstance(final GuiControlRempes guiControl) 
 	{
 		if (actionRempes == null) {
@@ -63,12 +66,40 @@ public class ActionRempes implements Action {
 		else if (e.getActionCommand().equals(MenuRempes.ALERTE)) {
 			System.out.println("Demande Alerte");		
 			alerte();
-		}			 	 
-	} 
+		} else if (e.getActionCommand().equals(MenuRempes.CONNECION_HELP)) {
+			System.out.println("Demande Aide");
+			help();		
+		} 
+		
+		if (e.getActionCommand().equals(MenuRempes.AUTORIZATION)) {
+			System.out.println("Demande autorisation");			
+			JSONObject resultAutorise = LogFreebox.getInstance().authorize();
+
+			if (resultAutorise.getBoolean("success")) {
+				guiControl.showInfo(LogFreebox.MESSAGES_BUNDLE.getString("AUTHORIZE_OK"));
+			} else {
+				guiControl.showInfo(LogFreebox.MESSAGES_BUNDLE.getString("AUTHORIZE_KO"));
+			}			 
+		} else if (e.getActionCommand().equals(MenuRempes.CONNECTION_FREE)) {
+			System.out.println("Demande connexion");
+			LogFreebox.getInstance().connexion();
+
+		} else if (e.getActionCommand().equals(MenuRempes.DECONNECTION)) {
+			System.out.println("Demande deconnexion");
+			//JSONObject result =  
+			LogFreebox.getInstance().logout();
+			LogFreebox.getInstance().setCurrentSession(null);
+		}  
+	}
+
+	private void help() {
+		//HelpConnectionDialog help = 
+		new HelpConnectionDialog(MainControleRempes.mainFrame);		
+
+	}
 
 	private void alerte() {
-		final JFrame alerteFrame = MainControleRempes.mainFrame;
-		new AlerteDialogue(alerteFrame,ConfigParental.getInstance());
+		new AlerteDialog(MainControleRempes.mainFrame,ConfigParental.getInstance());
 	}
 
 	@Override

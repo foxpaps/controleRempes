@@ -39,7 +39,7 @@ import controleRempes.control.MP3Player;
 import controleRempes.data.Alerte;
 import controleRempes.data.ConfigParental;
 
-public class AlerteDialogue extends JDialog  implements ActionListener {
+public class AlerteDialog extends JDialog  implements ActionListener {
 
 	/** */
 	private static final long serialVersionUID = 1L;
@@ -95,11 +95,11 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		Icon testButtonIcon = null;
 
 		try {			
-			final URL url_open = AlerteDialogue.class.getResource(OPEN_ICON);
+			final URL url_open = AlerteDialog.class.getResource(OPEN_ICON);
 			final Image openImage = ImageIO.read(url_open);
 			openButtonIcon = new ImageIcon ( openImage);
 
-			final URL url_test = AlerteDialogue.class.getResource(MUSIC_ICON);
+			final URL url_test = AlerteDialog.class.getResource(MUSIC_ICON);
 			final Image testImage = ImageIO.read(url_test);
 			testButtonIcon = new ImageIcon ( testImage);
 
@@ -110,7 +110,7 @@ public class AlerteDialogue extends JDialog  implements ActionListener {
 		TEST_BUTTON_ICON = testButtonIcon;
 		}
 
-	public AlerteDialogue(JFrame parent, ConfigParental config) {
+	public AlerteDialog(JFrame parent, ConfigParental config) {
 		super(parent);		
 		setModal(true);
 

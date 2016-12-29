@@ -25,7 +25,7 @@ import controleRempes.control.freebox.LogFreebox;
 import controleRempes.data.ParamAccess;
 import controleRempes.data.ParamAccess.StatusAutorisation;
 import controleRempes.data.Planning;
-import controleRempes.ihm.AlerteDialogue;
+import controleRempes.ihm.AlerteDialog;
 import controleRempes.ihm.MainPanel;
 import controleRempes.ihm.MenuRempes;
 import controleRempes.ihm.StatusPanel;
@@ -64,8 +64,9 @@ public class MainControleRempes extends JFrame implements GuiControlRempes
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		JDialog.setDefaultLookAndFeelDecorated(true);
 
+		LogFreebox.getInstance(this);
 		paramAccess = ActionRempes.getInstance(this).initData(); // init des données par defaut
-		menuBar = new MenuRempes( LogFreebox.getInstance(this),ActionRempes.getInstance(this));
+		menuBar = new MenuRempes(ActionRempes.getInstance(this));
 		mainPanCommand = new MainPanel(paramAccess);
 		mainPanCommand.setPreferredSize(new Dimension(800,300));
 
@@ -140,7 +141,7 @@ public class MainControleRempes extends JFrame implements GuiControlRempes
 			{
 				mainFrame =new MainControleRempes();
 				mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) ) ;
-				final URL url_open = AlerteDialogue.class.getResource(PARENTS_ICON);
+				final URL url_open = AlerteDialog.class.getResource(PARENTS_ICON);
 				try {
 					Image openImage = ImageIO.read(url_open);
 					mainFrame.setIconImage(openImage);

@@ -1,7 +1,5 @@
 package controleRempes.control.freebox;
 
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -17,7 +15,6 @@ import java.util.ResourceBundle;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.Action;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpEntity;
@@ -31,9 +28,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import controleRempes.MainControleRempes;
-import controleRempes.ihm.MenuRempes;
+//import controleRempes.ihm.MenuRempes;
 
-public class LogFreebox implements Action {
+public class LogFreebox  {
 
 	private static LogFreebox logFreebox = null;  
 
@@ -52,7 +49,7 @@ public class LogFreebox implements Action {
 
 	private GuiControl guiControl = null;
 
-	public static final ResourceBundle MESSAGES_BUNDLE = ResourceBundle.getBundle("properties.ihm.messages", Locale.getDefault());
+	public static final ResourceBundle MESSAGES_BUNDLE = ResourceBundle.getBundle("properties.control.freebox.messages", Locale.getDefault());
 
 
 	/**
@@ -60,7 +57,7 @@ public class LogFreebox implements Action {
 	 * @param guiControl
 	 * @return
 	 */
-	public static Action getInstance(final GuiControl guiControl) {
+	public static LogFreebox getInstance(final GuiControl guiControl) {
 		if (logFreebox == null) {
 			logFreebox =  new LogFreebox();
 		} 
@@ -215,6 +212,11 @@ public class LogFreebox implements Action {
 			guiControl.showError(e.getMessage());			
 			guiControl.showInfo(MESSAGES_BUNDLE.getString("ASK_AUTHORIZE_BOX"));
 			tokenAuthorize = authorize();
+			if (tokenAuthorize.getBoolean("success")) {
+				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_OK"));
+			} else {
+				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_KO"));
+			}
 		}
 
 		System.out.println("TokenAuthorize = " + tokenAuthorize.toString());
@@ -303,66 +305,6 @@ public class LogFreebox implements Action {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals(MenuRempes.AUTORIZATION)) {
-			System.out.println("Demande autorisation");			
-			JSONObject resultAutorise = authorize();
-
-			if (resultAutorise.getBoolean("success")) {
-				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_OK"));
-			} else {
-				guiControl.showInfo(MESSAGES_BUNDLE.getString("AUTHORIZE_KO"));
-			}			 
-		} else if (e.getActionCommand().equals(MenuRempes.CONNECTION_FREE)) {
-			System.out.println("Demande connexion");
-
-			connexion();
-
-		} else if (e.getActionCommand().equals(MenuRempes.DECONNECTION)) {
-			System.out.println("Demande deconnexion");
-			//JSONObject result =  
-			logout();
-			setCurrentSession(null);
-		}  
-	}
-
-	@Override
-	public Object getValue(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void putValue(String key, Object value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setEnabled(boolean b) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public String getCurrentSession() {
