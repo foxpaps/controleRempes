@@ -16,6 +16,7 @@ import controleRempes.data.ConfigParental;
 import controleRempes.data.Day;
 import controleRempes.data.ParamAccess;
 import controleRempes.data.Planning;
+import controleRempes.data.Vacances;
 import controleRempes.ihm.AlerteDialog;
 import controleRempes.ihm.HelpConnectionDialog;
 import controleRempes.ihm.MenuRempes;
@@ -35,6 +36,12 @@ public class ActionRempes implements Action {
 	}
 
 	public ParamAccess initData() {
+		
+		
+		// chargement des vacances scolaire
+		Vacances.loadVacancesScolaireParZone(guiControl);
+		
+		
 		final ParamAccess param = new ParamAccess();
 
 		param.setPeriferique("mon ordinateur");
@@ -47,10 +54,10 @@ public class ActionRempes implements Action {
 		semaine.setDay(1, new Day (weekdays[Calendar.TUESDAY]));
 		semaine.setDay(2, new Day (weekdays[Calendar.WEDNESDAY]));
 		semaine.setDay(3, new Day (weekdays[Calendar.THURSDAY]));
-		semaine.setDay(4, new Day (weekdays[Calendar.THURSDAY]));
+		semaine.setDay(4, new Day (weekdays[Calendar.FRIDAY]));
 		semaine.setDay(5, new Day (weekdays[Calendar.SATURDAY]));
 		semaine.setDay(6,  new Day (weekdays[Calendar.SUNDAY]));
-		semaine.setDay(7, new Day ("Special"));
+		semaine.setDay(7, new Day ("Spécial"));
 
 		param.setPlanning(semaine);
 		return param;

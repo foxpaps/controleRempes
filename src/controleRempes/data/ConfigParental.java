@@ -30,7 +30,8 @@ public class ConfigParental {
 	private static final String AUTORISATION =  "AlerteAutorisation";
 	private static final String AUTORISATION_BEFORE = "AlerteAutorisationBefore";
 	private static final String AUTORISATION_SOUND = "AlerteAutorisationSound";
-
+	private static final String URL_CAL_SCOOL ="LeCalendrierScolaire";
+	
 	private static final String NEWLINE = System.getProperty("line.separator");
 
 	private static  ConfigParental _instance = null;
@@ -42,6 +43,8 @@ public class ConfigParental {
 	private Alerte alerteWebUnique = null;
 	private Alerte alerteAutorisation = null;
 
+	private String UrlDuCalendrierScolaire = null;
+	
 	public static ConfigParental getInstance() {
 		if (_instance==null) {
 			_instance = new ConfigParental();
@@ -77,6 +80,8 @@ public class ConfigParental {
 			alerteAutorisation.setAlerteBloquageBefore(Integer.valueOf(properties.getProperty(AUTORISATION_BEFORE,"0")));
 			alerteAutorisation.setAlerteBloquageSound(new File(properties.getProperty(AUTORISATION_SOUND,"")).getPath());
 
+			setUrlDuCalendrierScolaire(properties.getProperty(URL_CAL_SCOOL));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
@@ -146,6 +151,14 @@ public class ConfigParental {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public String getUrlDuCalendrierScolaire() {
+		return UrlDuCalendrierScolaire;
+	}
+
+	public void setUrlDuCalendrierScolaire(String urlDuCalendrierScolaire) {
+		UrlDuCalendrierScolaire = urlDuCalendrierScolaire;
 	}
 
 

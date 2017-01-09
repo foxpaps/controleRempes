@@ -264,10 +264,44 @@ public class LogFreebox  {
 		return permission;
 	}
 
+	public JSONObject getVersion() {
+		// GET /api/v3/system/ HTTP/1.1
+		JSONObject result = null;
+		final CloseableHttpClient httpclient = HttpClients.createDefault();
+		final String uri = "http://mafreebox.freebox.fr/api/v3/system";
+		final HttpGet httpget = new HttpGet(uri);
+		httpget.addHeader("content-type", "application/json");	
+		httpget.addHeader("X-Fbx-App-Auth",currentSession);
+
+		try (CloseableHttpResponse response = httpclient.execute(httpget)){
+			System.out.println(response.getStatusLine());
+			HttpEntity entityReponse = response.getEntity();
+
+			if (entityReponse != null) {
+				final String retSrc = EntityUtils.toString(entityReponse); 
+				// get in JSON structure
+				result = new JSONObject(retSrc); //Convert String to JSON Object
+				System.out.println(result.toString());
+			}
+		} catch (Exception e) {
+			guiControl.showError(e.getMessage()); 
+			e.printStackTrace();
+		} finally {
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
 	public JSONObject logout() {
+		getVersion();
+		
 		JSONObject jsonToken = null;
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost(URL_LOGOUT);
+		final CloseableHttpClient httpclient = HttpClients.createDefault();
+		final HttpPost httpPost = new HttpPost(URL_LOGOUT);
 		httpPost.addHeader("X-Fbx-App-Auth",currentSession);
 
 		try (CloseableHttpResponse response = httpclient.execute(httpPost)){

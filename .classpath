@@ -3,11 +3,16 @@
 	<classpathentry excluding="resources/controlePapa/ihm/|resources/" kind="src" path="src"/>
 	<classpathentry excluding="controlePapa/ihm/" kind="src" path="src/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="httpclient-4.5.1.jar"/>
-	<classpathentry kind="lib" path="httpcore-4.4.3.jar"/>
-	<classpathentry kind="lib" path="jl1.0.1.jar"/>
-	<classpathentry kind="lib" path="mp3plugin.jar"/>
-	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/httpcore-4.4.3.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/mp3plugin.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/commons-lang3-3.5.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/ical4j-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/slf4j-api-1.7.22.jar"/>
+	<classpathentry kind="lib" path="/home/fabrice/dev/devjava/controleRempes/lib/slf4j-simple-1.7.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

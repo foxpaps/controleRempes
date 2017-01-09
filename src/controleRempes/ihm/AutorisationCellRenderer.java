@@ -8,6 +8,8 @@ import java.util.Calendar;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import controleRempes.MainControleRempes;
+import controleRempes.data.ParamAccess;
 import controleRempes.data.ParamAccess.StatusAutorisation;
 
 public class AutorisationCellRenderer extends DefaultTableCellRenderer {
@@ -30,10 +32,13 @@ public class AutorisationCellRenderer extends DefaultTableCellRenderer {
 			StatusAutorisation status = (StatusAutorisation) value;
 			setText("");
 
-			Calendar calendar = Calendar.getInstance();	
+			final ParamAccess paramAcces = MainControleRempes.getInstance().getParamAccess();
+			Calendar calendar = Calendar.getInstance();
+			
 			int numDay = calendar.get(Calendar.DAY_OF_WEEK);
 			numDay = (numDay+5)%7 ;
-			if (numDay==row) {
+			if ((numDay==row && !paramAcces.isSpecial(calendar))  ||
+				(row==7 && paramAcces.isSpecial(calendar))) {
 				int hour = calendar.get(Calendar.HOUR_OF_DAY);
 				int minute = calendar.get(Calendar.MINUTE);
 				int posInDay = hour*2 + (minute<29 ? 0 : 1);
@@ -43,6 +48,7 @@ public class AutorisationCellRenderer extends DefaultTableCellRenderer {
 					setText("X");
 				}
 			}
+			
 			switch (status) {
 			case allowed:
 				setBackground(Color.green);

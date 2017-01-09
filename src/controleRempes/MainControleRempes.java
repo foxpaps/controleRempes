@@ -158,17 +158,5 @@ public class MainControleRempes extends JFrame implements GuiControlRempes
 			}
 		});
 
-		
-		// create the status bar panel and shove it down the bottom of the frame;
-		
-		//frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR) ) ;
-
-		// login automatique
-
-		//frame.setVisible(true);
-
-
-		//frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)) ;
-
 	}
 }

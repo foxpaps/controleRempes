@@ -2,6 +2,7 @@ package controleRempes.control;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import controleRempes.data.ConfigParental;
 import controleRempes.data.Day;
 import controleRempes.data.ParamAccess;
 import controleRempes.data.ParamAccess.SchedulingMode;
+import controleRempes.data.ParamAccess.SpecialDayMode;
 import controleRempes.data.ParamAccess.StatusAutorisation;
 import controleRempes.data.Planning;
 import controleRempes.data.Planning.TypeFiltrage;
@@ -19,12 +21,12 @@ import controleRempes.data.Planning.TypeFiltrage;
 public class ThreadRefreshAccess implements Runnable  {
 
 	private static ThreadRefreshAccess refreshAccess = null;
-	
+
 	private GuiControlRempes guiControl = null;
- 
+
 	private ThreadRefreshAccess()  {		
 	}
-	
+
 	/**
 	 * Si cette fonction n'est pas appelée en premier ca va planté
 	 * @param guiControl
@@ -35,10 +37,10 @@ public class ThreadRefreshAccess implements Runnable  {
 			refreshAccess =  new ThreadRefreshAccess();
 			refreshAccess.guiControl = guiControl;
 		} 
-		
+
 		return refreshAccess;
 	}
-	
+
 	public static void refresh(final GuiControlRempes guiControl) {
 		(new Thread(getInstance(guiControl))).start();
 	}
@@ -69,13 +71,13 @@ public class ThreadRefreshAccess implements Runnable  {
 			guiControl.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
-		
+
 		hostName = "Matth-PC"; //TODO remove it
 
 		ParamAccess param = guiControl.getParamAccess();		
 		param.setPeriferique(hostName);
 
-		
+
 		JSONObject filter = null;
 		try {
 			filter = GetFilters.getCurrentFilter(hostName);
@@ -161,17 +163,28 @@ public class ThreadRefreshAccess implements Runnable  {
 		}
 		if (planning.getBoolean("success")) {
 			resultPlanning = planning.getJSONObject("result");				
-			Planning semaine = param.getPlanning();
+			final Planning semaine = param.getPlanning();
 
-			JSONArray mapping = resultPlanning.getJSONArray("mapping");			
-			int len = mapping.length();
+			final JSONArray mapping = resultPlanning.getJSONArray("mapping");			
 			int dayCount=0;
-			for (int i=0; i<len ; i++) {
-				Day day = semaine.getDay(dayCount);
+			for (int i=0; i< mapping.length() ; i++) {
+				final Day day = semaine.getDay(dayCount);
 				ParamAccess.StatusAutorisation enumSatus = mapping.getEnum(ParamAccess.StatusAutorisation.class, i);
 				day.setAutorisation(i - dayCount*48, enumSatus);
 				if ( (i+1) % 48==0) {
 					dayCount++;
+				}
+			}
+
+			final JSONArray specialDays = resultPlanning.getJSONArray("cdayranges");
+			if (specialDays.length()>0) {
+				final List<SpecialDayMode> specialDaysMode = param.getSpecialDays();
+
+				String specialDaysArray = (String) specialDays.get(0);
+				specialDaysArray = specialDaysArray.replaceAll(":", "");
+				String[] specialDaysTab = specialDaysArray.split(",");
+				for (String specialDay : specialDaysTab) {
+					specialDaysMode.add(ParamAccess.SpecialDayMode.valueOf(specialDay));
 				}
 			}
 		}
