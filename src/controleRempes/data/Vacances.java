@@ -98,6 +98,9 @@ public class Vacances  implements Cloneable {
 	private static void downloadLeCalendrierScolaire(GuiControlRempes guiControl) {
 
 		String UrlLeCalendrierScolaire = ConfigParental.getInstance().getUrlDuCalendrierScolaire();
+		if (UrlLeCalendrierScolaire==null) {
+			return;
+		}
 		System.out.println("UrlLeCalendrierScolaire = " + UrlLeCalendrierScolaire);
 
 		String fileOutStr = UrlLeCalendrierScolaire.substring(UrlLeCalendrierScolaire.lastIndexOf("/")+1,UrlLeCalendrierScolaire.length());
@@ -116,25 +119,30 @@ public class Vacances  implements Cloneable {
 		try {
 			URL urlGouv = new URL(UrlLeCalendrierScolaire);
 
+			File calendrierTmp = new  File ("tmp" + fileOutStr);
+
 			try (ReadableByteChannel rbc = Channels.newChannel(urlGouv.openStream());
-					FileOutputStream fos = new FileOutputStream(fileOutStr);)
+					FileOutputStream fos = new FileOutputStream(calendrierTmp);)
 			{
 				fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
-				transformIcs(fileOutStr);
-				guiControl.showInfo(ConfigParental.MESSAGES_BUNDLE.getString("INFO_COPY_VACANCES"));
+				if (transformIcs(calendrierTmp,calendrier)) {
+					guiControl.showInfo(ConfigParental.MESSAGES_BUNDLE.getString("INFO_COPY_VACANCES"));
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
 				guiControl.showError(ConfigParental.MESSAGES_BUNDLE.getString("COPY_ERROR_VACANCES"));
 
 			}
+
+
 		}catch (MalformedURLException e) {
 			if (guiControl!=null) {
 				guiControl.showError(ConfigParental.MESSAGES_BUNDLE.getString("URL_MAL_FORMED"));
 			}
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	private static String ltrim(String s) {
@@ -145,19 +153,24 @@ public class Vacances  implements Cloneable {
 		return s.substring(i);
 	}
 
-	private static void transformIcs(String icsFileStr) throws IOException {
+	private static boolean transformIcs(final File calendrierTmp,final File icsFile) throws IOException {
+
+		// verifier si le fichier est bien un ics d'aprés la première ligne
+		try (	BufferedReader br = new BufferedReader(new FileReader(calendrierTmp));) {
+			String line = br.readLine();
+			if (!line.contains("BEGIN:VCALENDAR")) {
+				Files.delete(calendrierTmp.toPath());
+				return false;
+			}
+		}
+		
 		// Le fichiers ics générés ajout des lf à la position 75,
 		// il le faut les supprimer
-
-		File icsFile = new File (icsFileStr); 
-		File fileTmp = new File ("tmp"+icsFileStr);
-
-		try (	FileWriter writer = new FileWriter(fileTmp, false);
-				BufferedReader br = new BufferedReader(new FileReader(icsFile));) {
+		try (	FileWriter writer = new FileWriter(icsFile, false);
+				BufferedReader br = new BufferedReader(new FileReader(calendrierTmp));) {
 			String line;
 			String lineBuff="";
 			while((line = br.readLine()) != null) {
-				// do something with line.
 				if (line.length()>=74) {
 					lineBuff += ltrim(line);
 				} else {
@@ -167,9 +180,9 @@ public class Vacances  implements Cloneable {
 				}
 			}
 
-			Files.move(fileTmp.toPath(), icsFile.toPath(), StandardCopyOption.REPLACE_EXISTING );
+			Files.move(calendrierTmp.toPath(), icsFile.toPath(), StandardCopyOption.REPLACE_EXISTING );
 		} 
-
+		return true;
 	}
 
 	private static List<Vacances> filtreVacanceScolaire(final List<Vacances> listVacances, final SpecialDayMode frSchoolHolidays) {
@@ -273,14 +286,14 @@ public class Vacances  implements Cloneable {
 	}
 
 	public static boolean isVacancesScolaire(Calendar calendarDate, SpecialDayMode frSchoolHolidays) {
-		
+
 		final List<Vacances> listVacances = listeVacancesParZone.get(frSchoolHolidays);
-		
+
 		final Date currentDate = calendarDate.getTime();
 		for (Vacances vacances : listVacances) {
 			final Date debut = vacances.getDebut();
 			final Date fin = vacances.getFin();
-			
+
 			if (debut!=null && fin!=null&& 
 					debut.compareTo(currentDate) <=0 &&
 					currentDate.compareTo(fin)<=0) {

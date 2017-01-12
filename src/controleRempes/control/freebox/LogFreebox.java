@@ -34,14 +34,15 @@ public class LogFreebox  {
 
 	private static LogFreebox logFreebox = null;  
 
-	private static String URL_AUTHORIZE = "http://mafreebox.freebox.fr/api/v3/login/authorize/";
-	private static String URL_SESSION = "http://mafreebox.freebox.fr/api/v3/login/session/";
-	private static String URL_LOGOUT = "http://mafreebox.freebox.fr/api/v3/login/logout/";
+	private static final String URL_AUTHORIZE = "http://mafreebox.freebox.fr/api/v3/login/authorize/";
+	private static final String URL_SESSION = "http://mafreebox.freebox.fr/api/v3/login/session/";
+	private static final String URL_LOGOUT = "http://mafreebox.freebox.fr/api/v3/login/logout/";
 
-	private static String TOKEN_FILE = "AppToken.txt";
+	private static final String TOKEN_FILE = "AppToken.txt";
 
-	private static String APP_NAME = "ControleRempes";
-	private static String APP_VERSION = "V1.0";
+	private static final String APP_ID = "ControleRempes";
+	private static final String APP_NAME = "Dady";
+	private static final String APP_VERSION = "V1.0";
 
 	public enum statusAuthorize {unknown,pending,timeout,granted,denied};
 
@@ -113,8 +114,10 @@ public class LogFreebox  {
 		httpPost.addHeader("content-type", "application/json");		
 		//httpPost.addHeader("content-type", "application/x-www-form-urlencoded");		
 		try {
-			String paramString = "{\"app_id\":\"" + APP_NAME +"\",\"app_name\":\"Dady\",\"app_version\":\"" + 
-					APP_VERSION + "\","+ "\"device_name\":\""+ hostName + "\"}";
+			String paramString = "{\"app_id\":\"" + APP_ID +
+					"\",\"app_name\":\"" + APP_NAME + 
+					"\",\"app_version\":\"" + APP_VERSION + "\"," + 
+					"\"device_name\":\""+ hostName + "\"}";
 			StringEntity params =new StringEntity(paramString);
 			httpPost.setEntity(params);
 		} catch (UnsupportedEncodingException e) {
@@ -183,7 +186,7 @@ public class LogFreebox  {
 		HttpPost httpPost = new HttpPost(URL_SESSION);
 		httpPost.addHeader("content-type", "application/json");		
 		try {
-			String paramString = "{\"app_id\": \""+APP_NAME+ "\",\"password\": \"" + password + "\"}";
+			String paramString = "{\"app_id\": \""+APP_ID+ "\",\"password\": \"" + password + "\"}";
 			StringEntity params =new StringEntity(paramString);
 			httpPost.setEntity(params);
 		} catch (UnsupportedEncodingException e) {

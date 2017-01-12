@@ -176,21 +176,26 @@ public class MainPanel extends JPanel {
 	public void updateTmpMode(ParamAccess param) {
 		String texte;
 		int expire = param.getTmpModeExpire();
-
+		int hours = expire / 3600;
+		int minutes = (expire % 3600) / 60;
+		int seconds = expire % 60;
+		final String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+		
+		
 		switch (param.getTmpMode())  {
 		case allowed:
 			texte =  MESSAGES_BUNDLE.getString("ALLOW_TMP");
-			texte += expire;
+			texte += timeString;
 			authorizationTmp.setForeground(Color.green);
 			break;
 		case denied:
 			texte =  MESSAGES_BUNDLE.getString("PROHIBIT_TMP");
-			texte += expire;
+			texte += timeString;
 			authorizationTmp.setForeground(Color.red);
 			break;
 		case webonly:
 			texte = "Web temporaire : ";
-			texte += expire;
+			texte += timeString;
 			authorizationTmp.setForeground(Color.blue);
 			break;
 		default:

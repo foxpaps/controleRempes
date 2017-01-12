@@ -22,10 +22,13 @@ public class ThreadCheckAlertes implements Runnable  {
 	public void run() {
 
 		try {
+			StatusAutorisation previousCurrentStatus = null;
+			StatusAutorisation previousNextStatus = null;
+
 			while (true) {
 				long beginTime  = System.currentTimeMillis();
 				System.out.println("Check Alertes begin");
-				
+
 				final Planning planning = MainControleRempes.getInstance().getParamAccess().getPlanning();
 				Calendar calendar = Calendar.getInstance();	
 				StatusAutorisation currentStatus = planning.getStatus(calendar);
@@ -35,16 +38,19 @@ public class ThreadCheckAlertes implements Runnable  {
 
 				int minute = nextCalendar.get(Calendar.MINUTE);
 				minute = (minute/30)*30;
-				nextCalendar.set(Calendar.MINUTE, minute);
-				
-				
-				if (currentStatus != nextStatus) {
-					long diff = (nextCalendar.getTimeInMillis() - calendar.getTimeInMillis())/1000;
-					if (checkAlarme(nextStatus,diff)) {
-						//force the next status in the current status
-						planning.setStatus(calendar, nextStatus);
+				nextCalendar.set(Calendar.MINUTE, minute);				
+
+				// Si un des status précédents a changés, on peut redéclencher un alarme
+				if (previousCurrentStatus!=null && previousCurrentStatus != currentStatus 
+						|| previousNextStatus!= null && previousNextStatus != nextStatus) {
+					if (currentStatus != nextStatus) {
+						long diff = (nextCalendar.getTimeInMillis() - calendar.getTimeInMillis())/1000;
+						checkAlarme(nextStatus,diff);
 					}
 				}
+				previousCurrentStatus = currentStatus;
+				previousNextStatus = nextStatus;
+
 				Thread.sleep(periode -(System.currentTimeMillis() -beginTime));
 			}
 		} catch (InterruptedException e) {
@@ -58,7 +64,7 @@ public class ThreadCheckAlertes implements Runnable  {
 		String sound = null;
 		final ConfigParental config = ConfigParental.getInstance();
 		boolean allowed = false;
-		
+
 		switch (nextStatus) {
 		case allowed:
 			timeBefore = config.getAlerteAutorisation().getAlerteBefore();
@@ -78,7 +84,7 @@ public class ThreadCheckAlertes implements Runnable  {
 		default:
 			break;		
 		}
-		
+
 		if (allowed && changeIn < timeBefore*60 && sound !=null) {
 			Path path = Paths.get(sound);
 			MP3Player.play(path);

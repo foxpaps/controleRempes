@@ -1,20 +1,21 @@
-; frequence de rafraichissement des données du control parental en minutes
+; fréquence de rafraîchissement des données du contrôle parental en minutes
 frequenceRefresh=5
 
-;Alerte Bloquage
+; Alerte Blocage
 AlerteBloquage=true
 AlerteBloquageBefore=29
 AlerteBloquageSound=src/Evil-laugh.mp3
 
-;Alerte Web Unique
+; Alerte Web Unique
 AlerteWebUnique=true
 AlerteWebUniqueBefore=29
 AlerteWebUniqueSound=src/Fire-truck-with-siren-passing-by.mp3
 
-;Alerte Autorisation
+; Alerte Autorisation
 AlerteAutorisation=true
-AlerteAutorisationBefore=29
+AlerteAutorisationBefore=5
 AlerteAutorisationSound=src/Old-fashioned-alarm-clock.mp3
 
-;Url de référence du calendrier scolaire (corse exclue) - recharger automatiquement aprés 90 jours
+;Url de référence du calendrier scolaire (corse exclue) - rechargé automatiquement aprés 90 jours
 LeCalendrierScolaire=http://cache.media.education.gouv.fr/ics/Calendrier_Scolaire_Zones_A_B_C.ics
+

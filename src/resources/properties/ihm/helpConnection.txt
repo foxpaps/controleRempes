@@ -1,21 +1,21 @@
 1 : Avertissements : 
   - Freebox v6
   - Rappel; le principe de cette application et de pouvoir visualiser les accés d'une machine à internet sans donner le mot de passe de la freebox.
-  - Les droits de connection données à l'application ne son valable que pour la machine qui le demande.
-  - Cette application ne fait que lire les données de la freebox concernant le contrôle parental et ne peut les modifier	.
+  - Les droits de connexion données à l'application ne son valable que pour la machine qui le demande.
+  - Cette application ne fait que lire les données de la freebox concernant le contrôle parental et ne peut les modifier.
   
 2 : Paramétrage de la freebox :
   - Pour paramétrer la freebox depuis votre navigateur web allez sur http://mafreebox.freebox.fr
-  - Pour gérer les accés de vos banbin utilisez l'application web "Contrôle parental" 
+  - Pour gérer les accès de vos banbins utilisez l'application web "Contrôle parental" 
   - Pour pour gérer les droits des applications utilisez l'application web "Paramètre de la freebox" , onglet "mode avancé", divers "Gestion des accés", onglet application.
   
-3 : Principe de la première connection avec la freebox
-  a - Demande de certificat à la freebox, accepter sur l'écran de la freebox (flêche droite)
-  b - Un certificat est alors sauvegarder dans une fichier AppToken.txt
-  c - Par défaut, l'accés au contrôle parental n'est pas actif pour les nouvelles applications, il faut donc aller l'ajouter manuellement (via l'interface web de freebox).
-  d - Maintenant la connection se fera automatiquement à chaque lancement de l'application, pas besoins du mot de passe!
+3 : Principe de la première connexion avec la freebox
+  a - L'application demande un certificat à la freebox, il faut accepter la demande sur l'écran de la freebox (flèche droite)
+  b - Un certificat est alors sauvegardé dans une fichier AppToken.txt
+  c - Par défaut, l'accès au contrôle parental n'est pas actif pour les nouvelles applications. Il faut donc aller l'ajouter manuellement (via l'interface web de freebox).
+  d - Maintenant la connexion se fera automatiquement à chaque lancement de l'application, pas besoins du mot de passe!
 
 4 : Des problèmes ?
-  - vérifier sur l'interface web de la freebox les droits d'accés (notament contrôle parental) de l'application.
-  - Si les problème persiste, supprimer le certificat AppToken.txt et recommencer la procédure.
+  - vérifiez sur l'interface web de la freebox les droits d'accès (notamment celui du contrôle parental) de l'application.
+  - Si les problèmes persistent, supprimez le certificat AppToken.txt et recommencez la procédure.
   

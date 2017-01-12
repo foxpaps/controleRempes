@@ -64,15 +64,13 @@ public class ThreadRefreshAccess implements Runnable  {
 	}
 
 	synchronized public void refreshParamAcces() {
-		String hostName  = "monPc"; // default name
+		String hostName  = "mon-Pc"; // default name
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e1) {
 			guiControl.showError(e1.getMessage()); 
 			e1.printStackTrace();
 		}	
-
-		hostName = "Matth-PC"; //TODO remove it
 
 		ParamAccess param = guiControl.getParamAccess();		
 		param.setPeriferique(hostName);

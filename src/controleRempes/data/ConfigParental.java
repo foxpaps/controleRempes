@@ -143,6 +143,10 @@ public class ConfigParental {
 			writer.write (AUTORISATION_BEFORE + "=" + alerteAutorisation.getAlerteBefore() + NEWLINE);
 			writer.write (AUTORISATION_SOUND + "=" + alerteAutorisation.getAlerteBloquageSoundPath() + NEWLINE);	
 			writer.write (NEWLINE);
+			
+			writer.write (MESSAGES_BUNDLE.getString("REM_URL_CAL") + NEWLINE);
+			writer.write (URL_CAL_SCOOL + "=" + UrlDuCalendrierScolaire + NEWLINE);
+			writer.write (NEWLINE);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
