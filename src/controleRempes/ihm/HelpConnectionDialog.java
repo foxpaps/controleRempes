@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -59,8 +60,7 @@ public class HelpConnectionDialog extends JDialog  implements ActionListener {
 
 		final URL urlHelpFile = HelpConnectionDialog.class.getResource(HELP_FILE);
 
-		//This is where a real application would open the file.
-		try (Reader reader = new BufferedReader(new InputStreamReader(urlHelpFile.openStream()))) {
+		try (Reader reader = new BufferedReader(new InputStreamReader(urlHelpFile.openStream(),  StandardCharsets.UTF_8))) {
 			text.read(reader, "reading file");
 		}
 		catch (Exception e) {
@@ -84,6 +84,5 @@ public class HelpConnectionDialog extends JDialog  implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		this.dispose();
 	}
-
 
 }
